@@ -12,14 +12,14 @@ async function checkIfAllowed(url) {
   return robots.canCrawl(url);
 }
 
-async function crawl(home_link = DEFAULT_HOST, quant) {
+async function crawl(url = DEFAULT_HOST, amount=10) {
 
   const browser = await puppeteer.launch({ waitUntil: 'domcontentloaded' });
   const page = await browser.newPage();
   await page.setUserAgent(DEFAULT_USER_AGENT);
-  await page.goto(home_link);
+  await page.goto(url);
 
-  if (await checkIfAllowed(home_link)) {
+  if (await checkIfAllowed(url)) {
     
     console.log("Fetching images and links...");
     const imgs = await fetchImgs(page);
@@ -27,7 +27,7 @@ async function crawl(home_link = DEFAULT_HOST, quant) {
 
     objectsList.push({url: DEFAULT_HOST, imgSLinks: imgs});
 
-    for (let i = 0; i < quant; i++) {
+    for (let i = 0; i < amount; i++) {
       let link = links[i].url;
       try {
         if (await checkIfAllowed(link)) {
