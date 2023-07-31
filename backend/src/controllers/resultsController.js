@@ -1,4 +1,4 @@
-const crawl = require('../crawler');
+const { crawl } = require('../crawler');
 
 const createCrawlerResults = async (req, res) => {
 
@@ -12,7 +12,7 @@ const createCrawlerResults = async (req, res) => {
       console.error(error);
       res.status(500).send('Ocorreu um erro ao executar o crawler.');
     }
-  };
+};
 
 module.exports = {
     createCrawlerResults

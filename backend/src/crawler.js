@@ -40,9 +40,7 @@ async function crawl(url = DEFAULT_HOST, amount=10) {
       }
     }
   }
-  
   await browser.close();
-
   return JSON.stringify(objectsList, null, " ")
 
 }
@@ -73,4 +71,4 @@ async function fetchImgs(link) {
   )
 }
 
-module.exports = crawl;
+module.exports = { crawl };

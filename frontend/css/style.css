@@ -1,0 +1,34 @@
+.link-input {
+    width: 100%; /* Define a largura como 100% */
+    margin-bottom: 15px;
+}
+
+.results-table {
+    width: 100%; /* Defina a altura desejada */
+}
+
+.save-results-button {
+    display: block;
+    margin: 0 auto;
+    margin-top: auto;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+}
+
+.button-container button {
+    margin-right: 10px;
+}
+
+.loading-text {
+    display: flex;
+    justify-content: center;
+}
+  
+  
+  
+
+
+
