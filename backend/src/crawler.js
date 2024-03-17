@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const robotsParser = require('robots-txt-parser');
 
 const DEFAULT_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)" + "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36";
-const DEFAULT_HOST = "https://en.wikipedia.org/wiki/List_of_dog_breeds";
+const DEFAULT_HOST = "https://en.wikipedia.org/wiki/Affenpinscher";
 const robots = robotsParser({ userAgent: DEFAULT_USER_AGENT });
 
 var objectsList = [];
@@ -24,6 +24,8 @@ async function crawl(url = DEFAULT_HOST, amount=10) {
     console.log("Fetching images and links...");
     const imgs = await fetchImgs(page);
     const links = await fetchUrls(page);
+
+    console.log("Amount of images: " + links.length)
 
     objectsList.push({url: DEFAULT_HOST, imgSLinks: imgs});
 
@@ -71,4 +73,4 @@ async function fetchImgs(link) {
   )
 }
 
-module.exports = { crawl };
+crawl()
