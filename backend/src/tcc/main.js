@@ -1,8 +1,9 @@
 const puppeteer = require('puppeteer');
 const { fetchImgs } = require('./crawling-tools/extract');
 const { buildsSctrucutureBasedOnTree } = require('./tree-structure/builder');
-const { writeJsonFile } = require('./utils/json/writer');
+const { writeJsonFile } = require('./utils/writer');
 const { returnLabeledDataBasedOnTextSimilarities } = require('./text-similarity/checker');
+const { executeDownloader } = require('./utils/orchestrator');
 
 (async () => {
 
@@ -23,6 +24,8 @@ const { returnLabeledDataBasedOnTextSimilarities } = require('./text-similarity/
     json = JSON.stringify(download, null, "   ");
 
     writeJsonFile('./tcc/results/download.json', json)
+
+    executeDownloader('python ./tcc/utils/downloader.py');
 
     await browser.close();
 
