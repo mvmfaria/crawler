@@ -1,0 +1,106 @@
+[
+   {
+      "img.src": "https://www.akc.org/wp-content/uploads/2017/11/Beagle-sniffing-in-the-woods-on-a-scent.jpg",
+      "img.alt": "Beagle sniffing in the woods on a scent.",
+      "node.textContent": "",
+      "parent.textContent": "",
+      "siblings": [
+         {
+            "sibling.textContent": ""
+         }
+      ],
+      "grandpa.textContent": "",
+      "uncles": [
+         {
+            "uncle.textContent": "",
+            "cousins": [
+               {
+                  "cousin.textContent": ""
+               }
+            ]
+         }
+      ]
+   },
+   {
+      "img.src": "https://www.akc.org/wp-content/uploads/2017/11/Beagle-standing-in-profile-looking-up-in-the-yard.jpg",
+      "img.alt": "Beagle standing in profile looking up in the yard.",
+      "node.textContent": "",
+      "parent.textContent": "",
+      "siblings": [
+         {
+            "sibling.textContent": ""
+         }
+      ],
+      "grandpa.textContent": "",
+      "uncles": [
+         {
+            "uncle.textContent": "",
+            "cousins": [
+               {
+                  "cousin.textContent": ""
+               }
+            ]
+         }
+      ]
+   },
+   {
+      "img.src": "https://www.akc.org/wp-content/themes/akc/component-library/assets/img/PPI.png",
+      "img.alt": "",
+      "node.textContent": "Different breeds have different needs. Protect their health and get your free quote through AKC Pet Insurance.",
+      "parent.textContent": "ADVERTISEMENTDifferent breeds have different needs. Protect their health and get your free quote through AKC Pet Insurance.",
+      "siblings": [
+         {
+            "sibling.textContent": "ADVERTISEMENT"
+         },
+         {
+            "sibling.textContent": "Different breeds have different needs. Protect their health and get your free quote through AKC Pet Insurance."
+         }
+      ],
+      "grandpa.textContent": "Hip Evaluation Thyroid Evaluation Musladin-Lueke Syndrome (MLS) - DNA Test Cardiac Exam Ophthalmologist EvaluationRead the Official Breed Club Health Club StatementADVERTISEMENTDifferent breeds have different needs. Protect their health and get your free quote through AKC Pet Insurance.Stay Up-To-Date About Dog HealthGet dog health information conveniently delivered to your inbox each weekEMAIL ADDRESSText fieldSIGN UPVIEW ALL THE CHOICES FOR AKC NEWSLETTERS TO RECEIVE THE CONTENT YOU WANT >AKC Privacy Policy",
+      "uncles": [
+         {
+            "uncle.textContent": "Hip Evaluation Thyroid Evaluation Musladin-Lueke Syndrome (MLS) - DNA Test Cardiac Exam Ophthalmologist Evaluation",
+            "cousins": [
+               {
+                  "cousin.textContent": "Hip Evaluation"
+               },
+               {
+                  "cousin.textContent": "Thyroid Evaluation"
+               },
+               {
+                  "cousin.textContent": "Musladin-Lueke Syndrome (MLS) - DNA Test"
+               },
+               {
+                  "cousin.textContent": "Cardiac Exam"
+               },
+               {
+                  "cousin.textContent": "Ophthalmologist Evaluation"
+               }
+            ]
+         },
+         {
+            "uncle.textContent": "Read the Official Breed Club Health Club Statement",
+            "cousins": []
+         },
+         {
+            "uncle.textContent": "ADVERTISEMENTDifferent breeds have different needs. Protect their health and get your free quote through AKC Pet Insurance.",
+            "cousins": [
+               {
+                  "cousin.textContent": "ADVERTISEMENT"
+               },
+               {
+                  "cousin.textContent": "Different breeds have different needs. Protect their health and get your free quote through AKC Pet Insurance."
+               }
+            ]
+         },
+         {
+            "uncle.textContent": "Stay Up-To-Date About Dog HealthGet dog health information conveniently delivered to your inbox each weekEMAIL ADDRESSText fieldSIGN UPVIEW ALL THE CHOICES FOR AKC NEWSLETTERS TO RECEIVE THE CONTENT YOU WANT >AKC Privacy Policy",
+            "cousins": [
+               {
+                  "cousin.textContent": "Stay Up-To-Date About Dog HealthGet dog health information conveniently delivered to your inbox each weekEMAIL ADDRESSText fieldSIGN UPVIEW ALL THE CHOICES FOR AKC NEWSLETTERS TO RECEIVE THE CONTENT YOU WANT >AKC Privacy Policy"
+               }
+            ]
+         }
+      ]
+   }
+]

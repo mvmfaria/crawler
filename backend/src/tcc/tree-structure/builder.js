@@ -6,11 +6,11 @@ async function buildsSctrucutureBasedOnTree(images)
     
     for (img of images)
     {
-        src = await img.evaluate(x => x.src)
+        src = await img.evaluate(x => x.src);
 
-        width = await img.evaluate(x => x.naturalWidth)
+        width = await img.evaluate(x => x.naturalWidth);
 
-        height = await img.evaluate(x => x.naturalHeight)
+        height = await img.evaluate(x => x.naturalHeight);
         
         /*can I keep this validation right here?*/
         if (width > 100 && height > 100 && ['.jpg', '.jpeg', '.png'].some(ext => src.endsWith(ext)) && src !== "")
@@ -23,25 +23,36 @@ async function buildsSctrucutureBasedOnTree(images)
             parent = await getParent(node);
             parentText = await extractTextFromElement(parent);
 
-            siblings = await getChilds(parent)
-            siblingsTextList = []
+            siblings = await getChilds(parent);
+            siblingsTextList = [];
 
             for (sibling of siblings)
             {
                 siblingText = await extractTextFromElement(sibling);
-                siblingsTextList.push({"sibling.textContent": siblingText})
+                siblingsTextList.push({"sibling.textContent": siblingText});
             }
 
             grandpa = await getParent(parent);
             grandpaText = await extractTextFromElement(grandpa);
 
             uncles = await getChilds(grandpa);
-            unclesTextList = []
+            unclesTextList = [];
 
             for (uncle of uncles)
             {
                 uncleText = await extractTextFromElement(uncle);
-                unclesTextList.push({"uncle.textContent" : uncleText})
+                
+                cousins = await getChilds(uncle);
+                cousinsTextList = [];
+
+                for (cousin of cousins)
+                {
+                    cousinText = await extractTextFromElement(cousin);
+                    cousinsTextList.push({"cousin.textContent": cousinText});
+                }
+                
+                unclesTextList.push({"uncle.textContent" : uncleText, "cousins": cousinsTextList});
+                
             }
 
             data.push({"img.src": src, "img.alt": alt, "node.textContent": nodeText, "parent.textContent": parentText, siblings: siblingsTextList, "grandpa.textContent": grandpaText, uncles: unclesTextList});

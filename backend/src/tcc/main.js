@@ -10,7 +10,7 @@ const { executeDownloader } = require('./utils/orchestrator');
     browser = await puppeteer.launch({headless: false});
     page = await browser.newPage();
 
-    await page.goto('https://en.wikipedia.org/wiki/Affenpinscher');
+    await page.goto('https://www.akc.org/dog-breeds/beagle/');
 
     images = await fetchImgs(page);
 
@@ -21,9 +21,13 @@ const { executeDownloader } = require('./utils/orchestrator');
 
     download = await returnLabeledDataBasedOnTextSimilarities(data, breeds);
 
-    json = JSON.stringify(download, null, "   ");
+    dataJson = JSON.stringify(data, null, "   ");
 
-    writeJsonFile('./tcc/results/download.json', json)
+    writeJsonFile('./tcc/results/data.json', dataJson)
+
+    downloadJson = JSON.stringify(download, null, "   ");
+
+    writeJsonFile('./tcc/results/download.json', downloadJson)
 
     executeDownloader('python ./tcc/utils/downloader.py');
 
