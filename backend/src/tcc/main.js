@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-const { fetchImgs } = require('./crawling-tools/extract');
+const { fetchImgs, fetchUrls } = require('./crawling-tools/extract');
 const { buildsSctrucutureBasedOnTree } = require('./tree-structure/builder');
 const { writeJsonFile } = require('./utils/writer');
 const { returnLabeledDataBasedOnTextSimilarities } = require('./text-similarity/checker');
@@ -7,10 +7,10 @@ const { executeDownloader } = require('./utils/orchestrator');
 
 (async () => {
 
-    browser = await puppeteer.launch({headless: false});
+    browser = await puppeteer.launch({headless: true});
     page = await browser.newPage();
 
-    await page.goto('https://www.akc.org/dog-breeds/beagle/');
+    await page.goto('https://en.wikipedia.org/wiki/List_of_dog_breeds');
 
     images = await fetchImgs(page);
 
@@ -23,13 +23,13 @@ const { executeDownloader } = require('./utils/orchestrator');
 
     dataJson = JSON.stringify(data, null, "   ");
 
-    writeJsonFile('./tcc/results/data.json', dataJson)
+    writeJsonFile('./backend/src/tcc/results/data.json', dataJson)
 
     downloadJson = JSON.stringify(download, null, "   ");
 
-    writeJsonFile('./tcc/results/download.json', downloadJson)
+    writeJsonFile('./backend/src/tcc/results/download.json', downloadJson)
 
-    executeDownloader('python ./tcc/utils/downloader.py');
+    executeDownloader('python ./backend/src/tcc/utils/downloader.py');
 
     await browser.close();
 

@@ -3,6 +3,11 @@ async function fetchImgs(link)
     return await link.$$('img');
 }
 
+async function fetchUrls(link)
+{
+    return await link.$$('a');
+}
+
 async function getParent(node) 
 {
     const handle = await node.evaluateHandle(x => x.parentElement);
@@ -23,6 +28,7 @@ async function extractTextFromElement(element)
 
 module.exports = {
     fetchImgs,
+    fetchUrls,
     getParent,
     getChilds,
     extractTextFromElement

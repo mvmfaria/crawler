@@ -1,10 +1,10 @@
 import requests
 import json
 
-with open('./tcc/results/download.json', 'r') as file:
+with open('./backend/src/tcc/results/download.json', 'r') as file:
     data = json.load(file)
 
-destiny_repository = './tcc/results'
+destiny_repository = './backend/src/tcc/results'
 dataset_name = 'dataset'
 
 count = 1
