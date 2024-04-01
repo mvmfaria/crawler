@@ -3,10 +3,11 @@ async function fetchImgs(link)
     return await link.$$('img');
 }
 
-async function fetchUrls(link)
+async function fetchUrls(page) 
 {
-    return await link.$$('a');
+    return await page.$$eval('a', as => as.map(a => a.href));
 }
+
 
 async function getParent(node) 
 {

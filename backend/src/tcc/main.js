@@ -2,7 +2,6 @@ const puppeteer = require('puppeteer');
 const { fetchImgs, fetchUrls } = require('./crawling-tools/extract');
 const { buildsSctrucutureBasedOnTree } = require('./tree-structure/builder');
 const { writeJsonFile } = require('./utils/writer');
-const { returnLabeledDataBasedOnTextSimilarities } = require('./text-similarity/checker');
 const { executeDownloader } = require('./utils/orchestrator');
 
 (async () => {
@@ -10,26 +9,41 @@ const { executeDownloader } = require('./utils/orchestrator');
     browser = await puppeteer.launch({headless: true});
     page = await browser.newPage();
 
-    await page.goto('https://en.wikipedia.org/wiki/List_of_dog_breeds');
+    await page.goto('https://www.akc.org/dog-breeds/');
+    
+    links = await fetchUrls(page);
 
-    images = await fetchImgs(page);
+    download = [];
 
-    data = await buildsSctrucutureBasedOnTree(images);
+    let index = 0;
 
-    /*evectually will come from "breeds.json" */
-    breeds = ["affenpinscher", "beagle", "golden_retriever", "pug", "poodle"];
+    for (link of links)
+    {
+        try 
+        {
+            await page.goto(link);
+        } 
+        catch
+        {
+            continue;
+        }
 
-    download = await returnLabeledDataBasedOnTextSimilarities(data, breeds);
+        images = await fetchImgs(page, {timeout: 0});
 
-    dataJson = JSON.stringify(data, null, "   ");
+        usefullImages = await buildsSctrucutureBasedOnTree(images);
+        
+        download = download.concat(usefullImages);
 
-    writeJsonFile('./backend/src/tcc/results/data.json', dataJson)
+        index++;
 
-    downloadJson = JSON.stringify(download, null, "   ");
+        console.log(`progress ${index}/${links.length} | found images: ${images.length} | valid ones: ${usefullImages.length} | link: ${link}`);
+    }
+    
+    file = JSON.stringify(download, null, "   ");
+    
+    writeJsonFile('./tcc/results/download.json', file)
 
-    writeJsonFile('./backend/src/tcc/results/download.json', downloadJson)
-
-    executeDownloader('python ./backend/src/tcc/utils/downloader.py');
+    executeDownloader('python ./tcc/utils/downloader.py');
 
     await browser.close();
 
