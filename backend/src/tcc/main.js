@@ -6,12 +6,14 @@ const { executeDownloader } = require('./utils/orchestrator');
 
 (async () => {
 
-    browser = await puppeteer.launch({headless: true});
+    browser = await puppeteer.launch({headless: false});
     page = await browser.newPage();
 
-    await page.goto('https://www.akc.org/dog-breeds/');
+    await page.goto('https://en.wikipedia.org/wiki/List_of_dog_breeds');
     
     links = await fetchUrls(page);
+
+    console.log("amount of pages found: " + links.length);
 
     download = [];
 
@@ -30,7 +32,7 @@ const { executeDownloader } = require('./utils/orchestrator');
 
         images = await fetchImgs(page, {timeout: 0});
 
-        usefullImages = await buildsSctrucutureBasedOnTree(images);
+        usefullImages = await buildsSctrucutureBasedOnTree(images, 2);
         
         download = download.concat(usefullImages);
 

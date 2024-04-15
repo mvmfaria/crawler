@@ -1,95 +1,36 @@
-const { getParent, getChilds, extractTextFromElement } = require('../crawling-tools/extract');
+const { getParent, extractTextFromElement, getNeighbors } = require('../crawling-tools/extract');
 
 const { checkIfAreSimilar } = require('../text-similarity/checker');
 
-async function buildsSctrucutureBasedOnTree(images)
-{
+const Queue = require("./Queue");
+
+async function buildsSctrucutureBasedOnTree(images, limit) {
+
     labeledData = []
     
-    for (img of images)
-    {
+    for (img of images) {
+
         src = await img.evaluate(x => x.src);
 
         width = await img.evaluate(x => x.naturalWidth);
 
         height = await img.evaluate(x => x.naturalHeight);
         
-        if (width > 100 && height > 100 && ['.jpg', '.jpeg', '.png'].some(ext => src.endsWith(ext)) && src !== "")
-        {
+        if (width > 100 && height > 100 && ['.jpg', '.jpeg', '.png'].some(ext => src.endsWith(ext)) && src !== "") {
             alt = await img.evaluate(x => x.alt);
 
-            let similarText = checkIfAreSimilar(alt);
-            if (similarText) {
-                labeledData.push({ url: src, breed: similarText });
-                continue;
-            }
-
-            node = await getParent(img);
-            nodeText = await extractTextFromElement(node);
-
-            similarText = checkIfAreSimilar(nodeText);
-            if (similarText) {
-                labeledData.push({ url: src, breed: similarText });
-                continue;
-            }
-
-            parent = await getParent(node);
-            parentText = await extractTextFromElement(parent);
-
-            similarText = checkIfAreSimilar(parentText);
-            if (similarText) {
-                labeledData.push({ url: src, breed: similarText });
-                continue;
-            }
-
-            siblings = await getChilds(parent);
-
-            const foundSome = false;
-            for (sibling of siblings)
-            {
-                siblingText = await extractTextFromElement(sibling);
-                
-                similarText = checkIfAreSimilar(siblingText);
-                if (similarText) {
-                    labeledData.push({ url: src, breed: similarText });
-                    foundSome = true;
-                    continue;
-                }
-            }
-
-            if (foundSome) continue;
-
-            grandpa = await getParent(parent);
-            grandpaText = await extractTextFromElement(grandpa);
-
-            similarText = checkIfAreSimilar(grandpaText);
-            if (similarText) {
-                labeledData.push({ url: src, breed: similarText });
-                continue;
-            }
-
-            uncles = await getChilds(grandpa);
-
-            for (uncle of uncles)
-            {
-                uncleText = await extractTextFromElement(uncle);
-
-                similarText = checkIfAreSimilar(uncleText);
+            if (limit == 0) {
+                const similarText = checkIfAreSimilar(alt);
                 if (similarText) {
                     labeledData.push({ url: src, breed: similarText });
                     continue;
                 }
-                
-                cousins = await getChilds(uncle);
+            } else {
+                const node = await getParent(img);
+                const text = await BFSWithLimit(node, limit);
 
-                for (cousin of cousins)
-                {
-                    cousinText = await extractTextFromElement(cousin);
-                    similarText = checkIfAreSimilar(cousinText);
-                    if (similarText) {
-                        labeledData.push({ url: src, breed: similarText });
-                        continue;
-                    }
+                if (text) {
+                    labeledData.push({ url: src, breed: text });
                 }
             }
         }
@@ -102,6 +43,44 @@ async function buildsSctrucutureBasedOnTree(images)
     return labeledData;
 }
 
+async function BFSWithLimit(initialNode, limit)
+{
+    const queue = new Queue();
+    const visited = [];
+    let currentLevel = 0;
+
+    queue.enqueue(initialNode);
+
+    while (!queue.isEmpty())
+    {
+        if (currentLevel > limit) return null;
+
+        const node = queue.dequeue();
+
+        const text = await extractTextFromElement(node.element);
+
+        const similarText = checkIfAreSimilar(text);
+        if (similarText) 
+        {
+            return similarText;
+        }
+
+        visited.push(node.innerHTML);
+
+        const neighbors = await getNeighbors(node.element);
+
+        for (const neighbor of neighbors)
+        {
+            if (!visited.includes(neighbor.innerHTML))
+            {
+                queue.enqueue(neighbor);
+            }
+        }
+
+        currentLevel++;
+    }
+}
+
 module.exports = {
-    buildsSctrucutureBasedOnTree
+    buildsSctrucutureBasedOnTree,
 };

@@ -1,9 +1,48 @@
-const path = require('path');
+const puppeteer = require('puppeteer');
+const { getParent, getChilds, extractTextFromElement, getNeighbors, extractInnerHTMLFromElement } = require('./crawling-tools/extract');
+const { fetchImgs, fetchUrls } = require('./crawling-tools/extract');
 
-// Obtém o diretório atual
-const diretorioAtual = __dirname;
+(async () => {
 
-// Obtém o diretório pai do diretório atual
-const diretorioPai = path.dirname(diretorioAtual);
+  browser = await puppeteer.launch({headless: true});
 
-console.log("Diretório pai:", __dirname);
+  page = await browser.newPage();
+
+  await page.goto('https://en.wikipedia.org/wiki/Affenpinscher');
+
+  links = await fetchUrls(page);
+  
+  console.log(links.length);
+
+  images = await fetchImgs(page);
+
+  image = images[3]; //affenpinscher image.
+
+  src = await image.evaluate(x => x.src);
+
+  console.log(src);
+  
+  no = await getParent(image);
+
+  console.log(await extractTextFromElement(no));
+  console.log(await extractInnerHTMLFromElement(image));
+  
+  // pai = await getParent(no);
+  
+  // // console.log(await extractTextFromElement(pai));
+  
+  // avo = await getParent(pai);
+  
+  // vizinhos = await getNeighbors(avo);
+  // console.log(vizinhos.length);
+
+  // // filhosDoAvo = await getChilds(avo);
+
+  // // for (filho of filhosDoAvo)
+  // // {
+  // //   console.log(`${await extractTextFromElement(filho)} - ${await extractTextFromElement(pai)}`);
+  // // }
+
+  await browser.close();
+
+})();
