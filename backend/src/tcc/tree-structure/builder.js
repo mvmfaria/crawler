@@ -4,10 +4,18 @@ const { checkIfAreSimilar } = require('../text-similarity/checker');
 
 const Queue = require("./Queue");
 
-async function buildsSctrucutureBasedOnTree(images, limit) {
+/**
+ * Labels images based on graphs.
+ * 
+ * @param {Array} images - The array of images to be labeled.
+ * @param {number} limit - The limit for the breadth-first search.
+ * @param {string} page - The page link.
+ * @returns {Array} - The labeled data.
+ */
+async function LabelsImagesBasedOnGraphs(images, limit, page) {
 
     labeledData = []
-    
+
     for (img of images) {
 
         src = await img.evaluate(x => x.src);
@@ -15,8 +23,9 @@ async function buildsSctrucutureBasedOnTree(images, limit) {
         width = await img.evaluate(x => x.naturalWidth);
 
         height = await img.evaluate(x => x.naturalHeight);
-        
+
         if (width > 100 && height > 100 && ['.jpg', '.jpeg', '.png'].some(ext => src.endsWith(ext)) && src !== "") {
+
             alt = await img.evaluate(x => x.alt);
 
             if (limit == 0) {
@@ -27,15 +36,14 @@ async function buildsSctrucutureBasedOnTree(images, limit) {
                 }
             } else {
                 const node = await getParent(img);
-                const text = await BFSWithLimit(node, limit);
+                const result = await BFSWithLimit(node, limit);
 
-                if (text) {
-                    labeledData.push({ url: src, breed: text });
+                if (result) {
+                    labeledData.push({ breed: result.label, url: src, level: result.level, page: page });
                 }
             }
         }
-        else
-        {
+        else {
             continue;
         }
     }
@@ -43,16 +51,21 @@ async function buildsSctrucutureBasedOnTree(images, limit) {
     return labeledData;
 }
 
-async function BFSWithLimit(initialNode, limit)
-{
+/**
+ * Performs a breadth-first search (BFS) on a tree structure with a limit on the number of levels to traverse.
+ * 
+ * @param {Node} initialNode - The initial node to start the search from.
+ * @param {number} limit - The maximum number of levels to traverse.
+ * @returns {Promise<Object|null>} - A promise that resolves to an object containing information about the found node, or null if no matching node is found within the specified limit.
+ */
+async function BFSWithLimit(initialNode, limit) {
     const queue = new Queue();
     const visited = [];
     let currentLevel = 0;
 
     queue.enqueue(initialNode);
 
-    while (!queue.isEmpty())
-    {
+    while (!queue.isEmpty()) {
         if (currentLevel > limit) return null;
 
         const node = queue.dequeue();
@@ -60,19 +73,16 @@ async function BFSWithLimit(initialNode, limit)
         const text = await extractTextFromElement(node.element);
 
         const similarText = checkIfAreSimilar(text);
-        if (similarText) 
-        {
-            return similarText;
+        if (similarText) {
+            return { label: similarText, level: currentLevel }
         }
 
         visited.push(node.innerHTML);
 
         const neighbors = await getNeighbors(node.element);
 
-        for (const neighbor of neighbors)
-        {
-            if (!visited.includes(neighbor.innerHTML))
-            {
+        for (const neighbor of neighbors) {
+            if (!visited.includes(neighbor.innerHTML)) {
                 queue.enqueue(neighbor);
             }
         }
@@ -82,5 +92,5 @@ async function BFSWithLimit(initialNode, limit)
 }
 
 module.exports = {
-    buildsSctrucutureBasedOnTree,
+    LabelsImagesBasedOnGraphs,
 };

@@ -12,5 +12,3 @@ function executeDownloader(comand)
 }
 
 module.exports = {executeDownloader}
-
-
